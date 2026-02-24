@@ -1,0 +1,64 @@
+<template>
+    <lightning-card title="Transactions" icon-name="standard:currency">
+        <div class="slds-m-around_medium">
+          
+            <lightning-combobox
+                label="Filter by Status"
+                options={statusOptions}
+                value={selectedStatus}
+                onchange={handleStatusChange}>
+            </lightning-combobox>
+
+            <template lwc:if={wireError}>
+                <div class="slds-m-top_small slds-text-color_error">
+                    Failed to load transactions: {wireError.body.message}
+                </div>
+            </template>
+
+            <template lwc:if={hasTransactions}>
+                <lightning-datatable
+                    class="slds-m-top_small"
+                    key-field="Id"
+                    data={transactions}
+                    columns={columns}
+                    onrowselection={handleRowSelection}
+                    selected-rows={selectedRowIds}>
+                </lightning-datatable>
+
+                <lightning-button
+                    class="slds-m-top_small"
+                    label="Set Failed"
+                    variant="destructive"
+                    disabled={isSetFailedDisabled}
+                    onclick={handleSetStatus}>
+                </lightning-button>
+            </template>
+
+            <template lwc:else>
+                <p class="slds-m-top_small slds-text-color_weak">No transactions found</p>
+            </template>
+
+            <div class="slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">New Transaction</h3>
+
+                <lightning-input
+                    type="number"
+                    label="Amount"
+                    value={amount}
+                    min="0.01"
+                    step="0.01"
+                    onchange={handleAmountChange}
+                    formatter="currency">
+                </lightning-input>
+
+                <lightning-button
+                    class="slds-m-top_small"
+                    label="Create Transaction"
+                    variant="brand"
+                    onclick={handleCreate}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>
