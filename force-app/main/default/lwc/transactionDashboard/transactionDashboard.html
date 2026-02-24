@@ -28,9 +28,18 @@
                 <lightning-button
                     class="slds-m-top_small"
                     label="Set Failed"
+                    title="Set Status to Failed
                     variant="destructive"
                     disabled={isSetFailedDisabled}
-                    onclick={handleSetStatus}>
+                    onclick={handleSetStatusFailed}>
+                </lightning-button>
+                <lightning-button
+                    class="slds-m-top_small"
+                    label="Set Completed"
+                    title="Set Status to Completed
+                    variant="brand"
+                    disabled={isSetFailedDisabled}
+                    onclick={handleSetStatusComplete}>
                 </lightning-button>
             </template>
 

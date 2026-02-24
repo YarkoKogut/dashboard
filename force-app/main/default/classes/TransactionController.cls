@@ -17,7 +17,7 @@ public with sharing class TransactionController {
     }
 
     @AuraEnabled
-    public static void setStatusFailed(List<Id> transactionIds) {
+    public static void setStatus(List<Id> transactionIds, String status) {
         if (transactionIds == null || transactionIds.isEmpty()) {
             return;
         }
@@ -29,7 +29,7 @@ public with sharing class TransactionController {
         ];
 
         for (Transaction__c t : txns) {
-            t.Status__c = 'Failed';
+            t.Status__c = status;
         }
 
         update txns;

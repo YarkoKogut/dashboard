@@ -4,7 +4,7 @@ import { refreshApex } from '@salesforce/apex';
 import { createRecord, getRecordNotifyChange } from 'lightning/uiRecordApi';
 
 import getTransactions from '@salesforce/apex/TransactionController.getTransactions';
-import setStatusFailed from '@salesforce/apex/TransactionController.setStatusFailed';
+import setStatus from '@salesforce/apex/TransactionController.setStatus';
 import TRANSACTION_OBJECT from '@salesforce/schema/Transaction__c';
 import AMOUNT_FIELD from '@salesforce/schema/Transaction__c.Amount__c';
 import STATUS_FIELD from '@salesforce/schema/Transaction__c.Status__c';
@@ -64,10 +64,18 @@ export default class TransactionDashboard extends LightningElement {
         this.selectedRowIds = event.detail.selectedRows.map(row => row.Id);
     }
 
-    handleSetStatus() {
-        setStatusFailed({ transactionIds: this.selectedRowIds })
+    handleSetStatusFailed(){
+        this.handleSetStatus('Failed')
+    };
+
+    handleSetStatusComplete(){
+        this.handleSetStatus('Completed')
+    };
+
+    handleSetStatus(statusParam) {
+        setStatus({ transactionIds: this.selectedRowIds, status:statusParam })
             .then(() => {
-                this.showToast('Success', 'Status updated to Failed', 'success');
+                this.showToast('Success', 'Status updated to ' + statusParam, 'success');
                 this.selectedRowIds = [];
                 return refreshApex(this.wiredResult);
             })
@@ -75,6 +83,7 @@ export default class TransactionDashboard extends LightningElement {
                 this.showToast('Error', error.body?.message ?? error.message, 'error');
             });
     }
+
 
     handleAmountChange(event) {
         this.amount = parseFloat(event.target.value);
