@@ -64,16 +64,9 @@ export default class TransactionDashboard extends LightningElement {
         this.selectedRowIds = event.detail.selectedRows.map(row => row.Id);
     }
 
-    handleSetStatusFailed(){
-        this.handleSetStatus('Failed')
-    };
-
-    handleSetStatusComplete(){
-        this.handleSetStatus('Completed')
-    };
-
-    handleSetStatus(statusParam) {
-        setStatus({ transactionIds: this.selectedRowIds, status:statusParam })
+    handleSetStatus(event) {
+        const statusParam = event.target.dataset.status;
+        setStatus({ transactionIds: this.selectedRowIds, status: statusParam })
             .then(() => {
                 this.showToast('Success', 'Status updated to ' + statusParam, 'success');
                 this.selectedRowIds = [];
